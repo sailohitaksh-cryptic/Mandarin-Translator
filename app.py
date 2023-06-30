@@ -22,7 +22,7 @@ if input_type == "Text":
 
     if text:
         translated_text = translate_text(text)
-        st.text_area("Translated text:" ,translated_text)
+        st.text_area("Translated text" ,translated_text)
 
 elif input_type == "Voice":
     r = sr.Recognizer()
@@ -38,7 +38,7 @@ elif input_type == "Voice":
         translator = Translator(service_urls=["translate.google.com"])
         translation = translator.translate(text, src="zh-cn", dest="en").text
 
-        st.success(f"Translated text: {translation}")
+        st.text_area("Translated text" ,translation)
     except sr.UnknownValueError:
         st.warning("Sorry, I couldn't understand your speech.")
     except sr.RequestError as e:
@@ -59,4 +59,4 @@ elif input_type == "Image":
         translator = Translator(service_urls=["translate.google.com"])
         translation = translator.translate(text, src="zh-cn", dest="en").text
         
-        st.success(f"Translated text: {translation}")
+        st.text_area("Translated text" ,translation)
