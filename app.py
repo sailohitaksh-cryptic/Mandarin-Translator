@@ -7,17 +7,11 @@ from PIL import Image
 from pydub import AudioSegment
 import tempfile
 import os
+import subprocess
 
-OCR_FILE_URL = "https://github.com/sailohitaksh-cryptic/Mandarin-Translator/blob/b8267386cc1440fe1477849f006806a2fe2a42b9/OCR/tesseract.exe"
+tesseract_path = subprocess.run(["which", "tesseract"], capture_output=True, text=True).stdout.strip()
+pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
-# Download the OCR file from GitHub
-response = requests.get(OCR_FILE_URL)
-ocr_file = tempfile.NamedTemporaryFile(delete=False)
-ocr_file.write(response.content)
-ocr_file.close()
-
-# Set the Tesseract executable path
-pytesseract.pytesseract.tesseract_cmd = ocr_file.name
 
 st.title("Mandarin Translator")
 
