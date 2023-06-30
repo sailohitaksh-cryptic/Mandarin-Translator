@@ -1,2 +1,5 @@
 portaudio19-dev python3-all-dev
 ffmpeg
+tesseract-ocr
+tesseract-ocr-eng
+tesseract-ocr-chi-sim
