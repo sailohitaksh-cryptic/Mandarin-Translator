@@ -4,7 +4,9 @@ from googletrans import Translator
 import pytesseract
 import requests
 from PIL import Image
+from pydub import AudioSegment
 import tempfile
+import os
 
 OCR_FILE_URL = "https://github.com/sailohitaksh-cryptic/Mandarin-Translator/blob/b8267386cc1440fe1477849f006806a2fe2a42b9/OCR/tesseract.exe"
 
@@ -42,13 +44,18 @@ elif input_type == "Voice":
     if audio_file is not None:
         audio_bytes = audio_file.read()
 
+        # Save the uploaded audio file to a temporary location
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_audio:
             tmp_audio.write(audio_bytes)
             tmp_audio_path = tmp_audio.name
 
-        r = sr.Recognizer()
+        # Convert the audio file to WAV format
+        converted_audio_path = os.path.splitext(tmp_audio_path)[0] + ".wav"
+        AudioSegment.from_file(tmp_audio_path).export(converted_audio_path, format="wav")
 
-        with sr.AudioFile(tmp_audio_path) as source:
+        # Perform speech recognition on the converted audio file
+        r = sr.Recognizer()
+        with sr.AudioFile(converted_audio_path) as source:
             audio = r.record(source)
 
         try:
@@ -63,6 +70,10 @@ elif input_type == "Voice":
             st.warning("Sorry, I couldn't understand the audio.")
         except sr.RequestError as e:
             st.error(f"Error: {e}")
+
+        # Clean up temporary files
+        os.remove(tmp_audio_path)
+        os.remove(converted_audio_path)
 
 elif input_type == "Image":
     image_file = st.file_uploader("Upload an image:", type=["png", "jpg", "jpeg"])
