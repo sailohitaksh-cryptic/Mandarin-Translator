@@ -16,8 +16,6 @@ ocr_file.close()
 
 # Set the Tesseract executable path
 pytesseract.pytesseract.tesseract_cmd = ocr_file.name
-# Set the Tesseract executable path
-pytesseract.pytesseract.tesseract_cmd = OCR_FILE_PATH
 
 st.title("Mandarin Translator")
 
