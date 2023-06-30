@@ -5,13 +5,13 @@ import pytesseract
 import requests
 from PIL import Image
 
-OCR_FILE_URL = "https://github.com/sailohitaksh-cryptic/Mandarin-Translator/blob/b8267386cc1440fe1477849f006806a2fe2a42b9/OCR/tesseract.exe"
-OCR_FILE_PATH = "tesseract.exe"
+#OCR_FILE_URL = "https://github.com/sailohitaksh-cryptic/Mandarin-Translator/blob/b8267386cc1440fe1477849f006806a2fe2a42b9/OCR/tesseract.exe"
+OCR_FILE_PATH = "OCR/tesseract.exe"
 
 # Download the OCR file from GitHub
-response = requests.get(OCR_FILE_URL)
-with open(OCR_FILE_PATH, "wb") as file:
-    file.write(response.content)
+#response = requests.get(OCR_FILE_URL)
+#with open(OCR_FILE_PATH, "wb") as file:
+#    file.write(response.content)
 
 # Set the Tesseract executable path
 pytesseract.pytesseract.tesseract_cmd = OCR_FILE_PATH
