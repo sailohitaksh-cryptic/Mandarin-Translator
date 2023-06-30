@@ -36,24 +36,33 @@ if input_type == "Text":
         st.text_area("Translated text" ,translated_text)
 
 elif input_type == "Voice":
-    r = sr.Recognizer()
+    st.info("Upload an .mp3 file:")
+    audio_file = st.file_uploader("Upload audio", type=["mp3"])
 
-    with sr.Microphone() as source:
-        st.info("Speak in Mandarin...")
-        audio = r.listen(source)
+    if audio_file is not None:
+        audio_bytes = audio_file.read()
 
-    try:
-        text = r.recognize_google(audio, language="zh-CN")
-        st.success(f"Recognized text: {text}")
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_audio:
+            tmp_audio.write(audio_bytes)
+            tmp_audio_path = tmp_audio.name
 
-        translator = Translator(service_urls=["translate.google.com"])
-        translation = translator.translate(text, src="zh-cn", dest="en").text
+        r = sr.Recognizer()
 
-        st.text_area("Translated text" ,translation)
-    except sr.UnknownValueError:
-        st.warning("Sorry, I couldn't understand your speech.")
-    except sr.RequestError as e:
-        st.error(f"Error: {e}")
+        with sr.AudioFile(tmp_audio_path) as source:
+            audio = r.record(source)
+
+        try:
+            text = r.recognize_google(audio, language="zh-CN")
+            st.success(f"Recognized text: {text}")
+
+            translator = Translator(service_urls=["translate.google.com"])
+            translation = translator.translate(text, src="zh-cn", dest="en").text
+
+            st.text_area("Translated text", translation)
+        except sr.UnknownValueError:
+            st.warning("Sorry, I couldn't understand the audio.")
+        except sr.RequestError as e:
+            st.error(f"Error: {e}")
 
 elif input_type == "Image":
     image_file = st.file_uploader("Upload an image:", type=["png", "jpg", "jpeg"])
